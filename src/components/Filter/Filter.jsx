@@ -1,6 +1,6 @@
 import { Input } from './Filter.styled';
 import { useDispatch, useSelector } from 'react-redux';
-import { change } from 'redux/filterSlice';
+import { filterContacts } from '../../redux/actions';
 
 export const Filter = () => {
   const dispatch = useDispatch();
@@ -14,7 +14,7 @@ export const Filter = () => {
         name="filter"
         id="filter"
         value={filter}
-        onChange={e => dispatch(change(e.target.value))}
+        onChange={e => dispatch(filterContacts(e.target.value))}
       />
     </>
   );

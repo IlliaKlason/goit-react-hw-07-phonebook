@@ -1,10 +1,11 @@
 // import PropTypes from 'prop-types';
-import { useDispatch } from 'react-redux';
+// import { useDispatch } from 'react-redux';
 import { Formik, ErrorMessage } from 'formik';
 import * as yup from 'yup';
 import { Box } from 'components/Box/Box';
 import { Input, Button, StyledForm } from './Form.styled';
-import { addContact } from 'redux/contactsSlice';
+// import { addContact } from 'redux/contactsSlice';
+import { usePostContactMutation } from '../../api/myAPI';
 
 const schema = yup.object().shape({
   name: yup
@@ -24,18 +25,17 @@ const schema = yup.object().shape({
 });
 
 export const ContactForm = () => {
-  const dispatch = useDispatch();
+  const [submitForm] = usePostContactMutation();
+  // const dispatch = useDispatch();
   const initialValues = {
     name: '',
     number: '',
   };
 
-  const handleSubmit = (values, { resetForm }) => {
-    console.log(values);
-    const { name, number } = values;
-    dispatch(addContact(name, number));
-
+  const handleSubmit = async (values, { resetForm }) => {
     resetForm();
+    const { name, number } = values;
+    await submitForm({ name, number });
   };
 
   return (

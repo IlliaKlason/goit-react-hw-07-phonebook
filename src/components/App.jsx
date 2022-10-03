@@ -10,9 +10,12 @@ import { ContactForm } from './Form';
 import { Filter } from './Filter';
 import { ContactList } from './ContactsList';
 import { useSelector } from 'react-redux';
+import { useGetContactsQuery } from '../api/myAPI';
 
 export function App() {
-  const filteredContacts = useSelector(state => state.contacts);
+  const { data, error, isLoading, isFetching } = useGetContactsQuery();
+  // const filteredContacts = useSelector(state => state);
+  console.log(data);
   return (
     <Box
       display="flex"
@@ -30,7 +33,7 @@ export function App() {
         />
       </div>
       {/* contacts.length */}
-      {filteredContacts.length > 0 ? (
+      {data.length > 0 ? (
         <div>
           <h2>Contacts</h2>
           <Boxitem
