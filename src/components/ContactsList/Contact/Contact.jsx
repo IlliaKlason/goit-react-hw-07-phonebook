@@ -5,14 +5,16 @@ import { Button } from '../ContactList.styled';
 // import { deleteContact } from 'redux/contactsSlice';
 import { useDeleteContactByIdMutation } from '../../../api/myAPI';
 export const Contact = ({ id, name, number }) => {
-  const [deleteContact] = useDeleteContactByIdMutation();
+  const [deleteContact, { isLoading }] = useDeleteContactByIdMutation();
   // const dispatch = useDispatch();
   return (
     <>
       <p>
         {name}: {number}
       </p>
-      <Button onClick={() => deleteContact(id)}>Delete</Button>
+      <Button onClick={() => deleteContact(id)}>
+        {isLoading ? 'Delete....' : 'Delete'}
+      </Button>
     </>
   );
 };

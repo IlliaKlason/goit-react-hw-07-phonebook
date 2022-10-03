@@ -1,6 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
+import { setupListeners } from '@reduxjs/toolkit/dist/query';
 // import { filterReducer } from './filterSlice';
-import { filterReducer } from './reducers.js';
+import { filterReducer } from './reducers';
 // import { contactsReducer } from './contactsSlice';
 // import {
 //   persistStore,
@@ -13,15 +14,16 @@ import { filterReducer } from './reducers.js';
 //   REGISTER,
 // } from 'redux-persist';
 // import storage from 'redux-persist/lib/storage';
-import logger from 'redux-logger';
+// import logger from 'redux-logger';
 import { myAPI } from '../api/myAPI';
+import logger from 'redux-logger';
 
 const middleware = getDefaultMiddleware =>
   getDefaultMiddleware({
     // serializableCheck: {
     //   ignoreActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
     // },
-  }).concat(logger);
+  }).concat(myAPI.middleware, logger);
 
 // const rootReducer = combineReducers({
 //   filter: filterReducer,
@@ -46,3 +48,4 @@ export const store = configureStore({
 });
 
 // export const persistMaker = persistStore(store);
+setupListeners(store.dispatch);

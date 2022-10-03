@@ -1,11 +1,13 @@
 // import PropTypes from 'prop-types';
 // import { useDispatch } from 'react-redux';
+import { Notify } from 'notiflix';
 import { Formik, ErrorMessage } from 'formik';
 import * as yup from 'yup';
 import { Box } from 'components/Box/Box';
 import { Input, Button, StyledForm } from './Form.styled';
 // import { addContact } from 'redux/contactsSlice';
-import { usePostContactMutation } from '../../api/myAPI';
+import { useGetContactsQuery, usePostContactMutation } from '../../api/myAPI';
+// import { useSelector } from 'react-redux';
 
 const schema = yup.object().shape({
   name: yup
@@ -25,7 +27,11 @@ const schema = yup.object().shape({
 });
 
 export const ContactForm = () => {
-  const [submitForm] = usePostContactMutation();
+  // const checkContacts = useSelector(state => state.Contacts);
+  const { data } = useGetContactsQuery();
+
+  const [submitForm, { isLoading }] = usePostContactMutation();
+
   // const dispatch = useDispatch();
   const initialValues = {
     name: '',
@@ -33,8 +39,15 @@ export const ContactForm = () => {
   };
 
   const handleSubmit = async (values, { resetForm }) => {
+    const some = data.some(
+      i => i.name.toLowerCase() === values.name.toLowerCase()
+    );
+    if (some) {
+      return Notify.failure(` ${values.name} is already in contacts`);
+    }
     resetForm();
     const { name, number } = values;
+
     await submitForm({ name, number });
   };
 
@@ -57,7 +70,9 @@ export const ContactForm = () => {
           <ErrorMessage name="number" id="number" />
         </Box>
 
-        <Button type="submit">Add contact</Button>
+        <Button disabled={isLoading} type="submit">
+          {isLoading ? 'Add....' : 'Add contac'}
+        </Button>
       </StyledForm>
     </Formik>
   );

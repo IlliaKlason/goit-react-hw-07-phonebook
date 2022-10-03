@@ -9,21 +9,20 @@ const getContacts = (contacts, filter) => {
   return contacts.filter(
     contact =>
       contact.name.toLowerCase().includes(normalizedFilter) ||
-      contact.number.includes(filter)
+      contact.nu.includes(filter)
   );
 };
 
 export const ContactList = () => {
   const filterState = useSelector(state => state.filter);
-  const { data, error, isLoading, isFetching } = useGetContactsQuery();
-  console.log(data);
+  const { data, error, isLoading } = useGetContactsQuery();
   return (
     <>
       {error ? (
-        <>Error</>
+        <>error</>
       ) : isLoading ? (
-        <>Loading...</>
-      ) : data ? (
+        <h2>Loading...</h2>
+      ) : data.length > 0 ? (
         <List>
           {getContacts(data, filterState).map(({ id, name, number }) => (
             <ListItem key={id}>
@@ -31,7 +30,9 @@ export const ContactList = () => {
             </ListItem>
           ))}
         </List>
-      ) : null}
+      ) : (
+        <h2>No contacts yet</h2>
+      )}
     </>
   );
 };
